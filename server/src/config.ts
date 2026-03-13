@@ -18,6 +18,7 @@ export const config = {
   TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID || "",
   TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN || "",
   METERED_API_KEY: process.env.METERED_API_KEY || "",
+  METERED_APP_NAME: process.env.METERED_APP_NAME || "",
   TURN_URLS: process.env.TURN_URLS || "",
   TURN_USERNAME: process.env.TURN_USERNAME || "",
   TURN_CREDENTIAL: process.env.TURN_CREDENTIAL || "",

@@ -31,8 +31,9 @@ app.get("/api/ice-servers", async (_req, res) => {
   // Option 1: Metered TURN API (free tier — sign up at metered.ca)
   if (config.METERED_API_KEY) {
     try {
+      const appName = config.METERED_APP_NAME || "krea";
       const resp = await fetch(
-        `https://krea.metered.live/api/v1/turn/credentials?apiKey=${config.METERED_API_KEY}`
+        `https://${appName}.metered.live/api/v1/turn/credentials?apiKey=${config.METERED_API_KEY}`
       );
       const turnServers = await resp.json();
       if (Array.isArray(turnServers)) {
