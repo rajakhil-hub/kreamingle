@@ -51,9 +51,12 @@ app.prepare().then(() => {
   // Start 2 AM cron disconnect
   setupTimeGateCron(io);
 
-  // HTTP request handler — runs AFTER Socket.IO intercepts /socket.io/ requests
+  // HTTP request handler
   httpServer.on("request", (req, res) => {
     const pathname = req.url || "/";
+
+    // Skip Socket.IO requests — already handled by Engine.IO listener
+    if (pathname.startsWith("/socket.io")) return;
 
     // Health check
     if (pathname === "/health") {
