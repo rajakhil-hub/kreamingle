@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: krea-omegle
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: NEXTAUTH_SECRET
+        sync: false
+      - key: NEXTAUTH_URL
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: ALLOWED_EMAIL_DOMAIN
+        value: krea.ac.in
+      - key: TIME_GATE_START_HOUR
+        value: "0"
+      - key: TIME_GATE_END_HOUR
+        value: "24"
+      - key: TIME_GATE_TIMEZONE
+        value: Asia/Kolkata

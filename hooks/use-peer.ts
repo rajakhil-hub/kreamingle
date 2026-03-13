@@ -7,8 +7,6 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from "@/types";
-import { SOCKET_URL } from "@/lib/constants";
-
 type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
 interface UsePeerOptions {
@@ -77,7 +75,7 @@ export function usePeer({
       ];
 
       try {
-        const res = await fetch(`${SOCKET_URL}/api/ice-servers`);
+        const res = await fetch("/api/ice-servers");
         const data = await res.json();
         if (data.iceServers) iceServers = data.iceServers;
       } catch {

@@ -1,12 +1,12 @@
 import type { Server, Socket } from "socket.io";
 import { roomService } from "../services/room.js";
-import { MAX_MESSAGE_LENGTH } from "../../../shared/constants";
+import { MAX_MESSAGE_LENGTH } from "../../shared/constants";
 import type {
   ClientToServerEvents,
   ServerToClientEvents,
   InterServerEvents,
   SocketData,
-} from "../../../shared/socket-events";
+} from "../../shared/socket-events";
 
 type IOServer = Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>;
 type IOSocket = Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>;

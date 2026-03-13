@@ -6,7 +6,7 @@ import type {
   ServerToClientEvents,
   InterServerEvents,
   SocketData,
-} from "../../../shared/socket-events";
+} from "../../shared/socket-events";
 
 type SocketMiddleware = (
   socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>,

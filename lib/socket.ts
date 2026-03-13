@@ -1,7 +1,6 @@
 "use client";
 
 import { io, Socket } from "socket.io-client";
-import { SOCKET_URL } from "./constants";
 import type {
   ClientToServerEvents,
   ServerToClientEvents,
@@ -19,9 +18,9 @@ export function connectSocket(token: string): TypedSocket {
   // Return existing socket regardless of state — Socket.IO handles reconnection
   if (socket) return socket;
 
-  socket = io(SOCKET_URL, {
+  socket = io({
     auth: { token },
-    transports: ["websocket", "polling"],
+    transports: ["polling", "websocket"],
     autoConnect: true,
     reconnection: true,
     reconnectionAttempts: 10,

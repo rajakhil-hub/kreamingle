@@ -6,7 +6,7 @@ import type {
   ServerToClientEvents,
   InterServerEvents,
   SocketData,
-} from "../../../shared/socket-events";
+} from "../../shared/socket-events";
 
 type IOServer = Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>;
 type IOSocket = Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>;
@@ -22,7 +22,7 @@ function handleMatch(io: IOServer, match: { socket1Id: string; socket2Id: string
     return;
   }
 
-  const room = roomService.createRoom(socket1.id, socket2.id);
+  const room = roomService.createRoom(socket1.id, socket2.id, socket1.data.email, socket2.data.email);
 
   // Join both sockets to the Socket.io room
   socket1.join(room.id);
