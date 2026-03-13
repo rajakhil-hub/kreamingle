@@ -6,7 +6,6 @@ import { Navbar } from "@/components/navbar";
 import { VideoGrid } from "@/components/video-grid";
 import { TextChat } from "@/components/text-chat";
 import { ChatControls } from "@/components/chat-controls";
-import { SocketProvider } from "@/components/providers/socket-provider";
 import { useSocket } from "@/hooks/use-socket";
 import { useMediaStream } from "@/hooks/use-media-stream";
 import { usePeer } from "@/hooks/use-peer";
@@ -167,11 +166,11 @@ function ChatContent() {
 
 export default function ChatPage() {
   return (
-    <SocketProvider>
+
       <div className="flex min-h-screen flex-col">
         <Navbar />
         <ChatContent />
       </div>
-    </SocketProvider>
+
   );
 }

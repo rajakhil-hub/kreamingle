@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/navbar";
 import { TimeGateGuard } from "@/components/time-gate-guard";
-import { SocketProvider } from "@/components/providers/socket-provider";
 import { useSocket } from "@/hooks/use-socket";
 import type { MatchFoundPayload } from "@/types";
 
@@ -101,13 +100,13 @@ function LobbyContent() {
 
 export default function LobbyPage() {
   return (
-    <SocketProvider>
+
       <div className="flex min-h-screen flex-col">
         <Navbar />
         <TimeGateGuard>
           <LobbyContent />
         </TimeGateGuard>
       </div>
-    </SocketProvider>
+
   );
 }

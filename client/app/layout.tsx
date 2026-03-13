@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SessionProvider } from "@/components/providers/session-provider";
+import { SocketProvider } from "@/components/providers/socket-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen antialiased">
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider>
+          <SocketProvider>{children}</SocketProvider>
+        </SessionProvider>
       </body>
     </html>
   );
