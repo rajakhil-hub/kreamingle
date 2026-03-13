@@ -21,6 +21,7 @@ export function connectSocket(token: string): TypedSocket {
 
   socket = io(SOCKET_URL, {
     auth: { token },
+    transports: ["websocket", "polling"],
     autoConnect: true,
     reconnection: true,
     reconnectionAttempts: 10,

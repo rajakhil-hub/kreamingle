@@ -144,6 +144,12 @@ function ChatContent() {
             Chatting with <span className="text-purple-400">{matchData.partnerName}</span>
           </p>
         )}
+        {/* Debug info — remove after testing */}
+        <div className="rounded bg-gray-900 px-2 py-1 text-[10px] font-mono text-gray-400 space-y-0.5">
+          <div>socket: {socket?.id ?? "none"} | {isConnected ? "connected" : "disconnected"}</div>
+          <div>partner: {matchData?.partnerId ?? "none"} | initiator: {String(matchData?.isInitiator ?? "?")}</div>
+          <div>local: {localStream ? "yes" : "no"} | remote: {remoteStream ? "yes" : "no"}</div>
+        </div>
       </div>
 
       {/* Right side: Text Chat */}
