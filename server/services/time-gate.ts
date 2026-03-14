@@ -17,16 +17,19 @@ type IOServer = Server<ClientToServerEvents, ServerToClientEvents, InterServerEv
  * Handles the overnight wrap (e.g., 23:00 → 02:00).
  */
 export function isWithinTimeGate(): boolean {
+  const start = config.TIME_GATE_START_HOUR;
+  const end = config.TIME_GATE_END_HOUR;
+
+  // Always open (0–24)
+  if (start === 0 && end >= 24) return true;
+
   const now = new Date();
   const timeStr = now.toLocaleString("en-US", {
     timeZone: config.TIME_GATE_TIMEZONE,
     hour: "numeric",
     hour12: false,
   });
-  const currentHour = parseInt(timeStr);
-
-  const start = config.TIME_GATE_START_HOUR; // 23
-  const end = config.TIME_GATE_END_HOUR;     // 2
+  const currentHour = parseInt(timeStr) % 24; // normalize midnight (24 → 0)
 
   // Overnight window: 23 <= hour || hour < 2
   if (start > end) {
