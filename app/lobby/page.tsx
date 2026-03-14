@@ -12,6 +12,7 @@ function LobbyContent() {
   const router = useRouter();
   const [isSearching, setIsSearching] = useState(false);
   const [status, setStatus] = useState("");
+  const [onlineCount, setOnlineCount] = useState(0);
 
   // Redirect to gender selection if not set
   useEffect(() => {
@@ -19,6 +20,20 @@ function LobbyContent() {
       router.replace("/gender");
     }
   }, [router]);
+
+  // Fetch live online count
+  useEffect(() => {
+    const fetchCount = async () => {
+      try {
+        const res = await fetch("/api/time-gate");
+        const data = await res.json();
+        setOnlineCount(data.waitingCount || 0);
+      } catch { /* ignore */ }
+    };
+    fetchCount();
+    const interval = setInterval(fetchCount, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleMatchFound = useCallback(
     (data: MatchFoundPayload) => {
@@ -82,6 +97,14 @@ function LobbyContent() {
         <p className="text-[var(--muted)]">
           You&apos;ll be matched with a random Krea student
         </p>
+
+        <div className="flex items-center justify-center gap-2">
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" />
+          </span>
+          <span className="text-sm text-green-400 font-medium">{onlineCount} online now</span>
+        </div>
 
         {!isConnected && (
           <p className="text-yellow-400 text-sm">Connecting to server...</p>
