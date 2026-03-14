@@ -14,7 +14,7 @@ import type {
   ServerToClientEvents,
   InterServerEvents,
   SocketData,
-} from "./shared/socket-events";
+} from "./shared/socket-events.js";
 
 const dev = process.env.NODE_ENV !== "production";
 const port = parseInt(process.env.PORT || "3000");

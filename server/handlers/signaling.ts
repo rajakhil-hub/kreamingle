@@ -5,7 +5,7 @@ import type {
   ServerToClientEvents,
   InterServerEvents,
   SocketData,
-} from "../../shared/socket-events";
+} from "../../shared/socket-events.js";
 
 type IOServer = Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>;
 type IOSocket = Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>;

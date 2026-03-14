@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { ROOM_PREFIX } from "../../shared/constants";
+import { ROOM_PREFIX } from "../../shared/constants.js";
 
 export interface Room {
   id: string;
