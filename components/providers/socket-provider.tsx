@@ -21,7 +21,6 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
   const { status } = useSession();
   const [socket, setSocket] = useState<TypedSocket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [debugInfo, setDebugInfo] = useState("init");
   const didConnectRef = useRef(false);
 
   // Connect once when authenticated — never reconnect on re-renders
@@ -31,33 +30,15 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
         getCookie("__Secure-authjs.session-token") ||
         getCookie("authjs.session-token");
 
-      if (!token) {
-        setDebugInfo("session=authenticated but NO cookie found. cookies: " + document.cookie.substring(0, 100));
-        return;
-      }
+      if (!token) return;
 
-      setDebugInfo("connecting...");
       const s = connectSocket(token);
       didConnectRef.current = true;
       setSocket(s);
 
-      s.on("connect", () => {
-        console.log("[socket] Connected:", s.id);
-        setDebugInfo("connected: " + s.id);
-        setIsConnected(true);
-      });
-      s.on("disconnect", (reason) => {
-        console.log("[socket] Disconnected:", reason);
-        setDebugInfo("disconnected: " + reason);
-        setIsConnected(false);
-      });
-      s.on("connect_error", (err) => {
-        console.error("[socket] Connection error:", err.message);
-        setDebugInfo("connect_error: " + err.message);
-        setIsConnected(false);
-      });
-    } else if (status !== "authenticated") {
-      setDebugInfo("session=" + status);
+      s.on("connect", () => setIsConnected(true));
+      s.on("disconnect", () => setIsConnected(false));
+      s.on("connect_error", () => setIsConnected(false));
     }
 
     if (status === "unauthenticated" && didConnectRef.current) {
@@ -77,7 +58,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <SocketContext.Provider value={{ socket, isConnected, debugInfo }}>
+    <SocketContext.Provider value={{ socket, isConnected }}>
       {children}
     </SocketContext.Provider>
   );

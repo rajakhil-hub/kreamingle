@@ -146,29 +146,6 @@ app.prepare().then(() => {
       return;
     }
 
-    // Debug endpoint
-    if (pathname === "/debug") {
-      const sockets = Array.from(io.sockets.sockets.entries()).map(([id, s]) => ({
-        id,
-        name: s.data.name,
-        rooms: Array.from(s.rooms),
-      }));
-      res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(
-        JSON.stringify({
-          connectedSockets: sockets.length,
-          sockets,
-          rooms: roomService.getAllRooms().map((r) => ({
-            id: r.id,
-            socket1Id: r.socket1Id,
-            socket2Id: r.socket2Id,
-          })),
-          queueSize: queueService.getSize(),
-        })
-      );
-      return;
-    }
-
     // Everything else -> Next.js
     const parsedUrl = parse(req.url || "/", true);
     nextHandler(req, res, parsedUrl);

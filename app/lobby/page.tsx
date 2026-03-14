@@ -8,7 +8,7 @@ import { useSocket } from "@/hooks/use-socket";
 import type { MatchFoundPayload } from "@/types";
 
 function LobbyContent() {
-  const { socket, isConnected, debugInfo } = useSocket();
+  const { socket, isConnected } = useSocket();
   const router = useRouter();
   const [isSearching, setIsSearching] = useState(false);
   const [status, setStatus] = useState("");
