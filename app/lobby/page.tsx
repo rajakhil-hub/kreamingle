@@ -70,12 +70,6 @@ function LobbyContent() {
         {!isConnected && (
           <p className="text-yellow-400 text-sm">Connecting to server...</p>
         )}
-        {/* Debug — remove after testing */}
-        <p className="text-[10px] font-mono text-gray-500">
-          socket: {socket?.id ?? "none"} | {isConnected ? "connected" : "disconnected"}
-          <br />
-          debug: {debugInfo}
-        </p>
 
         {isSearching ? (
           <div className="space-y-4">

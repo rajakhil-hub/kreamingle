@@ -34,7 +34,7 @@ app.prepare().then(() => {
   >(httpServer, {
     path: "/socket.io",
     addTrailingSlash: false,
-    transports: ["polling", "websocket"],
+    transports: ["websocket", "polling"],
     cors: {
       origin: "*",
       methods: ["GET", "POST"],
@@ -72,27 +72,6 @@ app.prepare().then(() => {
         { urls: "stun:stun1.l.google.com:19302" },
       ];
 
-      const respond = () => {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ iceServers }));
-      };
-
-      if (config.METERED_API_KEY) {
-        const appName = config.METERED_APP_NAME || "krea";
-        fetch(
-          `https://${appName}.metered.live/api/v1/turn/credentials?apiKey=${config.METERED_API_KEY}`
-        )
-          .then((r) => r.json())
-          .then((turnServers) => {
-            if (Array.isArray(turnServers)) iceServers.push(...turnServers);
-          })
-          .catch((err) =>
-            console.error("[ice] Failed to fetch Metered TURN credentials:", err)
-          )
-          .finally(respond);
-        return;
-      }
-
       if (config.TURN_URLS && config.TURN_USERNAME && config.TURN_CREDENTIAL) {
         const turnUrls = config.TURN_URLS.split(",").map((u: string) => u.trim());
         iceServers.push({
@@ -102,7 +81,8 @@ app.prepare().then(() => {
         });
       }
 
-      respond();
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ iceServers }));
       return;
     }
 

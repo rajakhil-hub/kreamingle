@@ -13,8 +13,6 @@ export const config = {
   get TIME_GATE_START_HOUR() { return parseInt(env("TIME_GATE_START_HOUR", "23")); },
   get TIME_GATE_END_HOUR() { return parseInt(env("TIME_GATE_END_HOUR", "2")); },
   get TIME_GATE_TIMEZONE() { return env("TIME_GATE_TIMEZONE", "Asia/Kolkata"); },
-  get METERED_API_KEY() { return env("METERED_API_KEY"); },
-  get METERED_APP_NAME() { return env("METERED_APP_NAME"); },
   get TURN_URLS() { return env("TURN_URLS"); },
   get TURN_USERNAME() { return env("TURN_USERNAME"); },
   get TURN_CREDENTIAL() { return env("TURN_CREDENTIAL"); },

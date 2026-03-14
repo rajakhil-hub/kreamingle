@@ -21,7 +21,7 @@ export function connectSocket(token: string): TypedSocket {
   socket = io(window.location.origin, {
     path: "/socket.io",
     auth: { token },
-    transports: ["polling", "websocket"],
+    transports: ["websocket", "polling"],
     autoConnect: true,
     reconnection: true,
     reconnectionAttempts: 10,

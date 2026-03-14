@@ -9,6 +9,11 @@ import type {
 } from "@/types";
 type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
+// Pre-load simple-peer module so it's cached before first peer creation
+const simplePeerPromise = typeof window !== "undefined"
+  ? import("simple-peer").then((m) => m.default)
+  : null;
+
 interface UsePeerOptions {
   localStream: MediaStream | null;
   socket: TypedSocket | null;
@@ -66,7 +71,7 @@ export function usePeer({
     let mounted = true;
 
     (async () => {
-      const SimplePeer = (await import("simple-peer")).default;
+      const SimplePeer = await simplePeerPromise!;
 
       // Fetch ICE servers
       let iceServers: RTCIceServer[] = [
