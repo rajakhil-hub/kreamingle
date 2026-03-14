@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Navbar } from "@/components/navbar";
 
 interface Stats {
@@ -209,36 +209,18 @@ export default function AdminPage() {
                 Select two online users to force match them. If they&apos;re already chatting, they&apos;ll be disconnected from their current partner.
               </p>
               <div className="flex flex-wrap items-end gap-4">
-                <div className="flex-1 min-w-[200px]">
-                  <label className="block text-sm text-[var(--muted)] mb-1">User 1</label>
-                  <select
-                    value={matchEmail1}
-                    onChange={(e) => setMatchEmail1(e.target.value)}
-                    className="w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm"
-                  >
-                    <option value="">Select user...</option>
-                    {allUsers.map((u) => (
-                      <option key={u.email} value={u.email}>
-                        {u.name} ({u.school}) — {u.status}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="flex-1 min-w-[200px]">
-                  <label className="block text-sm text-[var(--muted)] mb-1">User 2</label>
-                  <select
-                    value={matchEmail2}
-                    onChange={(e) => setMatchEmail2(e.target.value)}
-                    className="w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm"
-                  >
-                    <option value="">Select user...</option>
-                    {allUsers.map((u) => (
-                      <option key={u.email} value={u.email}>
-                        {u.name} ({u.school}) — {u.status}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <UserAutocomplete
+                  label="User 1"
+                  value={matchEmail1}
+                  onChange={setMatchEmail1}
+                  users={allUsers}
+                />
+                <UserAutocomplete
+                  label="User 2"
+                  value={matchEmail2}
+                  onChange={setMatchEmail2}
+                  users={allUsers}
+                />
                 <button
                   onClick={forceMatch}
                   disabled={matching || !matchEmail1 || !matchEmail2}
@@ -322,6 +304,73 @@ export default function AdminPage() {
           </>
         )}
       </div>
+    </div>
+  );
+}
+
+function UserAutocomplete({ label, value, onChange, users }: {
+  label: string; value: string; onChange: (email: string) => void; users: User[];
+}) {
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Sync display text when value is cleared externally
+  useEffect(() => {
+    if (!value) setQuery("");
+  }, [value]);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const filtered = users.filter((u) =>
+    u.name.toLowerCase().includes(query.toLowerCase())
+  );
+
+  return (
+    <div className="flex-1 min-w-[200px] relative" ref={ref}>
+      <label className="block text-sm text-[var(--muted)] mb-1">{label}</label>
+      <input
+        type="text"
+        value={query}
+        placeholder="Type a name..."
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setOpen(true);
+          if (!e.target.value) onChange("");
+        }}
+        onFocus={() => setOpen(true)}
+        className="w-full rounded-lg border border-[var(--card-border)] bg-[var(--background)] px-3 py-2 text-sm"
+      />
+      {open && query.length > 0 && filtered.length > 0 && (
+        <div className="absolute z-10 mt-1 w-full max-h-48 overflow-y-auto rounded-lg border border-[var(--card-border)] bg-[var(--card)] shadow-lg">
+          {filtered.map((u) => (
+            <button
+              key={u.email}
+              onClick={() => {
+                onChange(u.email);
+                setQuery(u.name);
+                setOpen(false);
+              }}
+              className="flex w-full items-center justify-between px-3 py-2 text-sm hover:bg-purple-600/20 text-left"
+            >
+              <span>
+                {u.name}
+                <span className="ml-2 text-xs text-purple-300">{u.school}</span>
+              </span>
+              <span className={`text-xs ${u.status === "idle" ? "text-gray-400" : u.status === "in queue" ? "text-yellow-400" : "text-green-400"}`}>
+                {u.status}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
